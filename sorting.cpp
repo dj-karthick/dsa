@@ -93,6 +93,45 @@ void merge_sort(vector<int>& arr, int low, int high){
     merge(arr, low, mid, high);
 }
 
+int pivot_placement(vector<int>& arr, int low, int high){
+    int pivot = arr[low];
+    int i = low; //left pointer
+    int j = high; //right pointer
+
+    //It will run till i and j not crosses.
+    while(i < j){
+        //This will find the element that is greater than pivot.
+        while(arr[i] <= pivot && i <= high - 1){
+            i++;
+        }
+        //This will find the element that is lesser than or equal to pivot.
+        while(arr[j] > pivot && j >= low + 1){
+            j--;
+        }
+        if(i < j){
+            int temp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temp;
+        }
+    }
+    //When i and j crosses, i and j elements are in correct zone
+    // and j is in the smaller territory(Where everything is smaller 
+    //than pivot), elements right to the j are greater than pivot,
+    //So Swap j with pivot.
+    int temp = arr[j];
+    arr[j] = arr[low];
+    arr[low] = temp;
+    return j;
+}
+
+void quick_sort(vector<int>& arr, int low, int high){
+    if(low < high){
+        int part_index = pivot_placement(arr, low, high);
+        quick_sort(arr, low, part_index - 1);
+        quick_sort(arr, part_index + 1, high);
+    }
+}
+
 int main() {
     // Your code here
     int n;
@@ -104,7 +143,8 @@ int main() {
     // selection_sort(arr, n);
     // bubble_sort(arr, n);
     // insertion_sort(arr, n);
-    merge_sort(arr, 0, n-1);
+    // merge_sort(arr, 0, n-1);
+    quick_sort(arr, 0, n-1);
     for(auto it: arr){
         cout << it << " ";
     }
