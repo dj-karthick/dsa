@@ -132,6 +132,38 @@ void quick_sort(vector<int>& arr, int low, int high){
     }
 }
 
+int pivot_placement_desc(vector<int>& arr, int low, int high){
+    int pivot = arr[high];
+    int i = low; //left pointer
+    int j = high; //right pointer
+
+    while(i < j){
+        while(arr[i] > pivot && i <= high - 1){
+            i++;
+        }
+        while(arr[j] <= pivot && j >= low + 1){
+            j--;
+        }
+        if(i < j){
+            int temp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temp;
+        }
+    }
+    int temp = arr[i];
+    arr[i] = arr[high];
+    arr[high] = temp;
+    return i;
+}
+
+void quick_sort_desc(vector<int>& arr, int low, int high){
+    if(low < high){
+        int part_index = pivot_placement_desc(arr, low, high);
+        quick_sort_desc(arr, low, part_index - 1);
+        quick_sort_desc(arr, part_index + 1, high);
+    }
+}
+
 int main() {
     // Your code here
     int n;
@@ -144,7 +176,7 @@ int main() {
     // bubble_sort(arr, n);
     // insertion_sort(arr, n);
     // merge_sort(arr, 0, n-1);
-    quick_sort(arr, 0, n-1);
+    quick_sort_desc(arr, 0, n-1);
     for(auto it: arr){
         cout << it << " ";
     }
