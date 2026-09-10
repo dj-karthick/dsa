@@ -52,13 +52,33 @@ int second_smallest(vector<int>& arr, int n){
     return s_smallest;
 }
 
-vector<int> slargest_ssmallest(vector<int>& arr, int n){
+vector<int> s_largestS_smallest(vector<int>& arr, int n){
     int s_largest = second_largest(arr, n);
     int s_smallest = second_smallest(arr, n);
     cout << "Second Largest Number is: " << s_largest << endl;
     cout << "Second Smallest Number is: " << s_smallest << endl;
     return {s_largest, s_smallest};
+}//Best -> O(N), We can done this in bruteforce -> NlogN, Average -> 2N.
+
+bool is_sorted(vector<int>& arr, int n){
+    for(int i = 1; i < n; i++){
+        if(arr[i] >= arr[i-1]);
+        else return false;
+    }
+    return true;
 }
+
+//It will remove duplicates from sorted array
+int remove_duplicate(vector<int>& arr, int n){
+    int i = 0;
+    for(int j = 1; j < n; j++){
+        if(arr[j] != arr[i]){
+            arr[i+1] = arr[j];
+            i++;
+        }
+    }
+    return i+1;
+}//O(N) -> Tc, O(1) -> Sc
 
 int main() {
     // Your code here
@@ -69,10 +89,12 @@ int main() {
         cin >> arr[i];
     }
     // largest_element(arr, n);
-    vector<int>small_large = slargest_ssmallest(arr, n);
-    for(auto it: small_large){
-        cout << it << endl;
-    }
+    // vector<int>small_large = s_largestS_smallest(arr, n);
+    if(is_sorted(arr, n)) cout << "Sorted";
+    else cout << "Not Sorted";
+    // for(auto it: small_large){
+    //     cout << it << endl;
+    // }
     
     return 0;
 }
