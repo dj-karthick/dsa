@@ -80,21 +80,74 @@ int remove_duplicate(vector<int>& arr, int n){
     return i+1;
 }//O(N) -> Tc, O(1) -> Sc
 
+void left_rotate_one(vector<int>& arr, int n){
+    int first = arr[0];
+    for(int i = 1; i < n; i++){
+        arr[i-1] = arr[i];
+    }
+    arr[n-1] = first;
+}//Tc -> O(N)
+
+//BruteForce -> Tc-> O(n+d), Sc-> O(d)
+// void left_rotate_k(vector<int>& arr, int n, int k){
+//     if(k == 0 || k == n){
+//         return;
+//     }else if(k > n){
+//         k = k % n;
+//         if(k == 0 || k == n){
+//             return;
+//         }
+//     }
+//     vector<int> temp(k, 0);
+
+//     for(int i = 0; i < k; i++){
+//         temp[i] = arr[i];
+//     }
+//     for(int i = k; i < n; i++){
+//         arr[i-k] = arr[i];
+//     }
+//     for(int i = n-k; i < n; i++){
+//         arr[i] = temp[i-(n-k)];
+//     }
+// }
+
+//Optimal Solution -> Tc -> O(2N), Sc -> O(1)
+void left_rotate_k(int arr[], int n, int k){
+    if(k == 0 || k == n){
+        return;
+    }else if(k > n){
+        k = k % n;
+        if(k == 0 || k == n){
+            return;
+        }
+    }
+    reverse(arr, arr+k);
+    reverse(arr+k, arr+n);
+    reverse(arr, arr+n);
+}
+
 int main() {
     // Your code here
     int n;
     cin >> n;
-    vector<int> arr(n, 0);
+    int k;
+    cin >> k;
+    // vector<int> arr(n, 0);
+    int arr[n];
     for(int i = 0; i < n; i++){
         cin >> arr[i];
     }
     // largest_element(arr, n);
     // vector<int>small_large = s_largestS_smallest(arr, n);
-    if(is_sorted(arr, n)) cout << "Sorted";
-    else cout << "Not Sorted";
-    // for(auto it: small_large){
-    //     cout << it << endl;
-    // }
+    // if(is_sorted(arr, n)) cout << "Sorted";
+    // else cout << "Not Sorted";
+    // int i = remove_duplicate(arr, n);
+    // cout << i << endl;
+    // left_rotate_one(arr, n);
+    left_rotate_k(arr, n, k);
+    for(auto it: arr){
+        cout << it << endl;
+    }
     
     return 0;
 }
