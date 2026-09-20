@@ -265,17 +265,151 @@ vector<int> intersection_sorted(vector<int>& a, vector<int>& b){
     return ans; 
 }//Tc-> O(n1 + n2), Sc-> O(1)
 
+int brute_missing_number(vector<int>& arr){
+    int miss_num = -1;
+    for(int i = 1; i <= arr.size() + 1; i++){
+        int flag = 0;
+        for(int j = 0; j < arr.size(); j++){
+            if(arr[j] == i){
+                flag = 1;
+                break;
+            }
+        }
+        if(flag == 0){
+            miss_num = i;
+            break;
+        }
+    }
+    return miss_num;
+}//Tc-> O(n*n), Sc-> O(1)
+
+//Better Solution
+int better_missing_number(vector<int>& arr, int n){
+    vector<int> hash(n+2, 0);
+    int miss_num = -1;
+    for(int i = 0; i < n; i++){
+        hash[arr[i]] = 1;
+    }
+    for(int i = 1; i < hash.size(); i++){
+        if(hash[i] == 0){
+            miss_num = i;
+            break;
+        }
+    }
+    return miss_num;
+}//Tc-> O(2N), Sc-> O(N)
+
+//Optimal solution
+int missing_number_using_sum(vector<int>& arr, int n){
+    n = n+1;
+    int sum = n*(n+1) / 2; // For this calculation for eg: n = 10^5 the sum will around 10^10 so we need long datatype to store.
+    int s2 = 0;
+    for(int i = 0; i < n; i++){
+        s2 = s2 + arr[i];
+    }
+    return sum - s2;
+}//Tc-> O(N), Sc-> O(1)
+
+int missing_number_using_xor(vector<int>& arr, int n){
+    int miss_num = 0;
+    int xor1 = 0;
+    int xor2 = 0;
+    for(int i = 0; i < n; i++){
+        xor2 = xor2 ^ arr[i];
+        xor1 = xor1 ^ (i+1);
+    }
+    xor1 = xor1 ^ (n+1);
+    miss_num = xor1 ^ xor2;
+    return miss_num;
+}//Tc-> O(n), Sc-> O(1)
+
+int maximum_consecutive_ones(vector<int>& arr, int n){
+    int maxi = 0;
+    int cnt = 0;
+    for(int i = 0; i < n; i++){
+        if(arr[i] == 1){
+            cnt++;
+            maxi = max(maxi, cnt);
+        }
+        else{
+            cnt = 0;
+        }
+    }
+    return maxi;
+}//Tc-> O(n), Sc-> O(1)
+
+int brute_number_once(vector<int>& arr, int n){
+    int ans = 0;
+    for(int i = 0; i < n; i++){
+        int num = arr[i];
+        int cnt = 0;
+        for(int j = 0; j < n; j++){
+            if(arr[j] == num){
+                cnt++;
+            }
+        }
+        if(cnt == 1){
+            ans = num;
+            break;
+        }
+    }
+    return ans;
+}//Tc-> O(n*n), Sc-> O(1)
+
+int better_number_once(vector<int>& arr, int n){
+    int maxi = 0;
+    int ans = 0;
+    for(int i = 0; i < n; i++){
+        maxi = max(maxi, arr[i]);
+    }
+
+    vector<int> hash(maxi+1, 0);
+    for(int i = 0; i < n; i++){
+        hash[arr[i]]++;
+    }
+
+    for(int i = 0; i < n; i++){ //If the once num is placed at last of arr[] then at worst case it will take n operations.
+        if(hash[arr[i]] == 1){
+            ans = arr[i];
+            break;
+        }
+    }//The other way for this loop is loop till maxi element ie: hash array size, based on the input we can use any of them.
+    return ans;
+}//Tc-> O(3N), Sc-> O(maxi)
+
+int optimal_number_once(vector<int>& arr, int n){
+    unordered_map<long long, int> mpp;
+    int ans = 0;
+    for(int i = 0; i < n; i++){
+        mpp[arr[i]]++;
+    }
+    for(auto it: mpp){
+        if(it.second == 1){
+            ans = it.first;
+        }
+    }
+    return ans;
+}//Tc-> O(nlog m) + O(n/2 + 1), Sc-> O(n/2 + 1)
+
+int number_once_xor(vector<int>& arr, int n){
+    int xor1 = 0;
+    for(int i = 0; i < n; i++){
+        xor1 = xor1 ^ arr[i];
+    }
+    return xor1;
+}//Tc-> O(n), Sc-> O(1)
+
 int main() {
     // Your code here
-    // int n;
-    // cin >> n;
+    int n;
+    cin >> n;
     // int k;
     // cin >> k;
-    // vector<int> arr(n, 0);
+    vector<int> arr(n, 0);
     // int arr[n];
-    // for(int i = 0; i < n; i++){
-    //     cin >> arr[i];
-    // }
+    for(int i = 0; i < n; i++){
+        cin >> arr[i];
+    }
     // largest_element(arr, n);
     // vector<int>small_large = s_largestS_smallest(arr, n);
     // if(is_sorted(arr, n)) cout << "Sorted";
@@ -288,28 +422,38 @@ int main() {
     // brute_move_zero_end(arr, n);
     // move_zero_end(arr, n);
     // cout << "Index is :" << linear_search(arr, n, 4) << endl;
-    int n1;
-    cin >> n1;
-    vector<int> arr1(n1);
-    for(int i = 0; i < n1; i++){
-        cin >> arr1[i];
-    }
+    // int n1;
+    // cin >> n1;
+    // vector<int> arr1(n1);
+    // for(int i = 0; i < n1; i++){
+    //     cin >> arr1[i];
+    // }
 
-    int n2;
-    cin >> n2;
-    vector<int> arr2(n2, 0);
-    for(int i = 0; i < n2; i++){
-        cin >> arr2[i];
-    }
+    // int n2;
+    // cin >> n2;
+    // vector<int> arr2(n2, 0);
+    // for(int i = 0; i < n2; i++){
+    //     cin >> arr2[i];
+    // }
     
 
     // vector<int> uni_arr = brute_union_sorted(arr1, arr2);
     // vector<int> union_arr = union_sorted(arr1, arr2);
     // vector<int> intersection_arr = brute_intersection_sorted(arr1, arr2);
-    vector<int> intersection_arr = intersection_sorted(arr1, arr2);
-    for(auto it: intersection_arr){
-        cout << it << endl;
-    }
+    // vector<int> intersection_arr = intersection_sorted(arr1, arr2);
+    // int miss_num = brute_missing_number(arr);
+    // int miss_num = better_missing_number(arr, n);
+    // int miss_num = missing_number_using_sum(arr, n);
+    // int miss_num = missing_number_using_xor(arr, n);
+    // int maxi = maximum_consecutive_ones(arr, n);
+    // int once = optimal_number_once(arr, n);
+    int once = number_once_xor(arr, n);
+    // cout  << "Missing number is : " << miss_num;
+    // cout << "Maxi is: " << maxi;
+    cout << "Number occurring once is: " << once;
+    // for(auto it: intersection_arr){
+    //     cout << it << endl;
+    // }
     
     return 0;
 }
